@@ -1,11 +1,29 @@
-node('built-in')
+@Library('mylibrary')_
+pipeline
 {
- stage('ContinuousDownload')
-  {
-    git 'https://github.com/chakriyuvi/mymavenn.git'
-  }
-      stage('ContinuousBuild')
-     {
-       sh 'mvn package'
-     }
-}     
+    agent any
+    stages
+    {
+          stage('continuousdownloads_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newgit("https://github.com/chakriyuvi/mymavenn.git")
+                }
+            }
+        }
+        
+        stage('continuousbuild_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newmaven()
+                }
+            }
+          }
+     } 
+ }
