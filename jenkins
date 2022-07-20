@@ -1,0 +1,61 @@
+@Library('mylibrary')_
+pipeline
+{
+    agent any
+    stages
+    {
+          stage('continuousdownloads_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newgit("https://github.com/chakriyuvi/mymavenn.git")
+                }
+            }
+        }
+        
+        stage('continuousbuild_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newmaven()
+                }
+            }
+        }
+        stage('continuousdeployment_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newdeploy("sharedlibrarywithdeclaretivepipeline","172.31.86.173","testapp" )
+                }
+            }
+        }
+        stage('continuoustesting_master')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.newgit("https://github.com/intelliqittrainings/FunctionalTesting.git")
+                    cicd.newselenium("sharedlibrarywithdeclaretivepipeline")
+                }
+            }
+        }
+        stage('continuousdelivery_master')
+        {
+            steps
+            {
+                script
+                {
+                cicd.newdeploy("sharedlibrarywithdeclaretivepipeline","172.31.80.134","prodapp" )
+                }
+            }
+        }
+    }
+}   
+
